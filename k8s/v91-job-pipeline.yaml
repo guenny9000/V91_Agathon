@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: v91-job-pipeline
+spec:
+  template:
+    spec:
+      containers:
+        - name: v91-container
+          image: your-image-here
+          command: ["your-command-here"]
+          env:
+            - name: SEMGREP_TOKEN
+              value: your-semgrep-token
+      restartPolicy: Never
+  backoffLimit: 4
