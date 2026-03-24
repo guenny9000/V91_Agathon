@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audit-log-pvc
+  labels:
+    app: audit-logs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi# Adjust as necessary for your storage requirements
+  storageClassName: standard
+  volumeMode: Filesystem
