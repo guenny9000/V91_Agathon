@@ -1,0 +1,6 @@
+# Development Dependencies
+
+pytest
+pylint
+black
+coverage
