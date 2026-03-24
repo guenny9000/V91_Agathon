@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v91-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: v91-app
+  template:
+    metadata:
+      labels:
+        app: v91-app
+    spec:
+      containers:
+      - name: v91-container
+        image: your-image:latest
+        ports:
+        - containerPort: 80
