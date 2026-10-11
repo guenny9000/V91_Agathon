@@ -1,34 +1,58 @@
-# V91-AUDIT-V3.0 Implementation
+"""Executable core components for V91 Agathon.
 
-## CAP-01: Conflict Assessment & Perception
+These small, deterministic helpers provide a working API for the documented
+conflict-assessment and resource-governance concepts. They do not take external
+actions or make authorization decisions.
+"""
+from dataclasses import dataclass, field
+from typing import Any
 
-### Introduction
-Conflict Assessment & Perception (CAP-01) involves evaluating conflicts that may affect project outcomes and stakeholder perceptions. This section outlines the processes to assess potential conflicts and ways to address them effectively.
 
-### Methodology
-1. **Identify Stakeholders**: Create a list of all stakeholders involved in the project.
-2. **Gather Data**: Use surveys, interviews, and historical data to understand stakeholder perceptions and past conflicts.
-3. **Assess Impact**: Analyze the potential impact of identified conflicts on project success.
-4. **Develop Mitigation Strategies**: Create strategies to manage and mitigate conflicts.
+@dataclass
+class Component1:
+    """Record and summarize a conflict assessment."""
 
-### Implementation Steps
-- **Conduct Workshops**: Facilitate workshops to discuss perceptions and conflicts openly.
-- **Regular Updates**: Ensure stakeholders receive regular updates on project progress and conflict resolution strategies.  
+    assessments: list[dict[str, Any]] = field(default_factory=list)
 
-## RGM-01: Resource Governance & Management
+    def assess(self, subject: str, impact: str, evidence: str) -> dict[str, str]:
+        """Record an assessment; evidence must be supplied explicitly."""
+        if not subject.strip():
+            raise ValueError("subject must not be empty")
+        if not impact.strip():
+            raise ValueError("impact must not be empty")
+        if not evidence.strip():
+            raise ValueError("evidence must not be empty")
+        record = {
+            "subject": subject.strip(),
+            "impact": impact.strip(),
+            "evidence": evidence.strip(),
+        }
+        self.assessments.append(record)
+        return record
 
-### Introduction
-Resource Governance & Management (RGM-01) focuses on efficient management of resources required for successful project execution. It emphasizes accountability and transparency in resource allocation and usage.
+    def list_assessments(self) -> list[dict[str, str]]:
+        """Return a copy so callers cannot mutate the internal list."""
+        return [dict(item) for item in self.assessments]
 
-### Principles
-1. **Accountability**: Ensure all stakeholders are accountable for resource usage.
-2. **Transparency**: Maintain clear communication regarding resource distribution and consumption.
-3. **Sustainability**: Promote sustainable practices in resource management.
 
-### Implementation Steps
-- **Resource Allocation Plan**: Develop and implement a detailed resource allocation plan.
-- **Monitoring & Evaluation**: Establish monitoring systems to evaluate resource utilization against the plan.
-- **Feedback Mechanism**: Integrate feedback systems for stakeholders to report concerns about resource management.
+@dataclass
+class Component2:
+    """Track resource allocations without performing external operations."""
 
-### Conclusion
-Both CAP-01 and RGM-01 are crucial for ensuring project sustainability and success. Stakeholder engagement and proactive conflict and resource management strategies will contribute significantly to achieving project goals.
+    allocations: dict[str, float] = field(default_factory=dict)
+
+    def allocate(self, resource: str, amount: float) -> dict[str, float | str]:
+        """Record a non-negative allocation for a named resource."""
+        name = resource.strip()
+        if not name:
+            raise ValueError("resource must not be empty")
+        if isinstance(amount, bool) or not isinstance(amount, (int, float)):
+            raise TypeError("amount must be a number")
+        if amount < 0:
+            raise ValueError("amount must be non-negative")
+        self.allocations[name] = float(amount)
+        return {"resource": name, "amount": float(amount)}
+
+    def total_allocated(self) -> float:
+        """Return the sum of recorded allocations."""
+        return sum(self.allocations.values())
