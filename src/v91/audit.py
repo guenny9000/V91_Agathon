@@ -83,7 +83,7 @@ class HashChainAuditLogger:
             "pid": os.getpid(),
             "created_at_unix": time.time(),
             "token": token,
-        }, sort_keys=True) + "\\n"
+        }, sort_keys=True) + "\n"
         flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
         if hasattr(os, "O_BINARY"):
             flags |= os.O_BINARY
@@ -191,9 +191,9 @@ class HashChainAuditLogger:
                 "prev_hash": previous_hash,
             }
             record = {**core, "hash": self._hash_core(core)}
-            serialized = self._canonical_json(record) + "\\n"
+            serialized = self._canonical_json(record) + "\n"
             try:
-                with self.log_file.open("a", encoding="utf-8", newline="\\n") as handle:
+                with self.log_file.open("a", encoding="utf-8", newline="\n") as handle:
                     handle.write(serialized)
                     handle.flush()
                     os.fsync(handle.fileno())
