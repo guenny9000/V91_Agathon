@@ -5,6 +5,7 @@ conflict-assessment and resource-governance concepts. They do not take external
 actions or make authorization decisions.
 """
 from dataclasses import dataclass, field
+from math import isfinite
 from typing import Any
 
 
@@ -16,12 +17,9 @@ class Component1:
 
     def assess(self, subject: str, impact: str, evidence: str) -> dict[str, str]:
         """Record an assessment; evidence must be supplied explicitly."""
-        if not subject.strip():
-            raise ValueError("subject must not be empty")
-        if not impact.strip():
-            raise ValueError("impact must not be empty")
-        if not evidence.strip():
-            raise ValueError("evidence must not be empty")
+        for field_name, value in (("subject", subject), ("impact", impact), ("evidence", evidence)):
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"{field_name} must be a non-empty string")
         record = {
             "subject": subject.strip(),
             "impact": impact.strip(),
@@ -43,11 +41,13 @@ class Component2:
 
     def allocate(self, resource: str, amount: float) -> dict[str, float | str]:
         """Record a non-negative allocation for a named resource."""
+        if not isinstance(resource, str) or not resource.strip():
+            raise ValueError("resource must be a non-empty string")
         name = resource.strip()
-        if not name:
-            raise ValueError("resource must not be empty")
         if isinstance(amount, bool) or not isinstance(amount, (int, float)):
             raise TypeError("amount must be a number")
+        if not isfinite(float(amount)):
+            raise ValueError("amount must be finite")
         if amount < 0:
             raise ValueError("amount must be non-negative")
         self.allocations[name] = float(amount)
