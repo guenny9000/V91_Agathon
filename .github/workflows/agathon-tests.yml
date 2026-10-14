@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'src/**'
+      - 'examples/**'
       - 'tests/**'
       - 'pyproject.toml'
       - '.github/workflows/agathon-tests.yml'
