@@ -1,22 +1,36 @@
-# pipeline.py
+"""Semgrep policy integration interface.
 
-# Semgrep integration and policy generation learning block
+This module intentionally fails loudly until a real scanner/policy adapter is
+implemented. Importing the package does not imply that a scan was performed.
+"""
+try:
+    import semgrep as _semgrep
+except ImportError:
+    _semgrep = None
 
-import semgrep
 
 class SemgrepIntegrator:
     def __init__(self):
-        self.client = semgrep
+        self.client = _semgrep
+
+    def available(self):
+        """Return whether the Semgrep Python package is importable."""
+        return self.client is not None
 
     def integrate(self):
-        # Implementation of Semgrep integration
-        pass
+        raise NotImplementedError(
+            "Semgrep integration is not implemented; no scan was executed."
+        )
 
     def generate_policy(self):
-        # Implementation of policy generation logic
-        pass
+        raise NotImplementedError(
+            "Policy generation is not implemented; no policy was generated."
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     integrator = SemgrepIntegrator()
-    integrator.integrate()
-    integrator.generate_policy()
+    raise SystemExit(
+        "Semgrep integration is a placeholder. "
+        f"Semgrep importable: {integrator.available()}. No scan was executed."
+    )
