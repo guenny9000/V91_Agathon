@@ -1,7 +1,7 @@
 import hashlib
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 class AuditLogger:
     def __init__(self, log_file):
@@ -120,7 +120,7 @@ class HashChainAuditLogger:
         previous_hash = records[-1]["hash"] if records else self.ZERO_HASH
         core = {
             "seq": len(records),
-            "timestamp": datetime.now().astimezone().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "action": action,
             "user": user,
             "additional_info": additional_info,
