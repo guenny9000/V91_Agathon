@@ -1,7 +1,13 @@
-# V91 Module Initialization
+"""Public V91 Agathon package API."""
 
-"""
-This module initializes the V91 package and imports core components.
-"""
+from .audit import HashChainAuditLogger
+from .audit_deep import AuditDeep
+from .multinode import MultiNodeOrchestrator
+from .pipeline import SemgrepIntegrator
 
-from .core import Component1, Component2  # Import the core components of the V91 module
+__all__ = [
+    "AuditDeep",
+    "HashChainAuditLogger",
+    "MultiNodeOrchestrator",
+    "SemgrepIntegrator",
+]

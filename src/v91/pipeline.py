@@ -1,22 +1,16 @@
-# pipeline.py
+"""Optional Semgrep adapter; never claims a scan unless one is implemented."""
+from __future__ import annotations
 
-# Semgrep integration and policy generation learning block
+import importlib.util
 
-import semgrep
 
 class SemgrepIntegrator:
-    def __init__(self):
-        self.client = semgrep
+    def available(self) -> bool:
+        """Report whether the Semgrep Python package is importable."""
+        return importlib.util.find_spec("semgrep") is not None
 
-    def integrate(self):
-        # Implementation of Semgrep integration
-        pass
+    def integrate(self) -> None:
+        raise NotImplementedError("Semgrep integration is not implemented; no scan was executed.")
 
-    def generate_policy(self):
-        # Implementation of policy generation logic
-        pass
-
-if __name__ == '__main__':
-    integrator = SemgrepIntegrator()
-    integrator.integrate()
-    integrator.generate_policy()
+    def generate_policy(self) -> None:
+        raise NotImplementedError("Policy generation is not implemented; no policy was generated.")
