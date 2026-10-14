@@ -1,1 +1,26 @@
-"""\nMulti-Node Orchestrator\n\nThis module provides an implementation of a Multi-Node Orchestrator, which is responsible for managing and coordinating multiple nodes in a distributed system.\n\nThe orchestrator handles the scheduling, resource allocation, and communication between nodes, ensuring efficient operation and robustness of the system.\n\nUsage:\n\n    orchestrator = MultiNodeOrchestrator()\n    orchestrator.add_node(node)\n    orchestrator.start()\n    orchestrator.stop()\n\nAttributes:\n\n    nodes (list): A list of nodes managed by the orchestrator.\n\nMethods:\n\n    add_node(node): Adds a new node to the orchestrator.\n    start(): Starts the orchestration process.\n    stop(): Stops the orchestration process.\n\n"""\n\nclass MultiNodeOrchestrator:\n    def __init__(self):\n        self.nodes = []\n\n    def add_node(self, node):\n        """Adds a new node to the orchestrator."""\n        self.nodes.append(node)\n\n    def start(self):\n        """Starts the orchestration process."""\n        # Implementation for starting the orchestrator\n        pass\n\n    def stop(self):\n        """Stops the orchestration process."""\n        # Implementation for stopping the orchestrator\n        pass
+"""Multi-node orchestration interface placeholder.
+
+Node registration is local only. Scheduling, transport, remote execution, and
+lifecycle management are not implemented; start/stop therefore fail explicitly.
+"""
+
+
+class MultiNodeOrchestrator:
+    def __init__(self):
+        self.nodes = []
+
+    def add_node(self, node):
+        """Register a node object locally; this does not connect to it."""
+        if node is None:
+            raise ValueError("node must not be None")
+        self.nodes.append(node)
+
+    def start(self):
+        raise NotImplementedError(
+            "Multi-node scheduling and communication are not implemented."
+        )
+
+    def stop(self):
+        raise NotImplementedError(
+            "Multi-node lifecycle management is not implemented."
+        )

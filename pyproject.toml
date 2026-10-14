@@ -1,30 +1,23 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "V91-Agathon"
 version = "0.1.0"
-description = "A project for V91 Agathon"
-authors = [
-    { name = "Your Name", email = "your.email@example.com" }
-]
+description = "V91 Agathon audit and governance components"
+authors = [{ name = "V91 Agathon contributors" }]
 readme = "README.md"
 license = { text = "MIT" }
 keywords = ["V91", "Agathon", "Python"]
-homepage = "https://github.com/guenny9000/V91_Agathon"
-repository = "https://github.com/guenny9000/V91_Agathon"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-
-dependencies = [
-    # Add your project dependencies here
-]
+requires-python = ">=3.10"
+dependencies = ["cryptography>=41"]
 
 [tool.setuptools]
-packages = [
-    { include = ["your_package_name"] }
-]
+package-dir = {"" = "src"}
+packages = ["v91"]
