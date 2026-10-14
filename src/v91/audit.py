@@ -38,3 +38,100 @@ class AuditLogger:
 # Usage example
 # logger = AuditLogger('audit_log.json')
 # logger.log('UserLogin', 'guenny9000', 'Logged in successfully')
+
+
+class HashChainAuditLogger:
+    """Single-writer SHA-256-linked JSONL audit log.
+
+    This detects accidental or deliberate edits when verify_chain() is run, but
+    a normal file is not WORM storage and can still be changed by a privileged
+    user or process. Existing files are never rewritten or migrated.
+    """
+
+    ZERO_HASH = "0" * 64
+
+    def __init__(self, log_file):
+        from pathlib import Path
+
+        self.log_file = Path(log_file)
+        self.log_file.parent.mkdir(parents=True, exist_ok=True)
+        if self.log_file.exists():
+            self.verify_chain()
+        else:
+            # Create without overwriting a file created by another process.
+            self.log_file.touch(exist_ok=False)
+
+    @staticmethod
+    def _canonical_json(value):
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+
+    @classmethod
+    def _hash_core(cls, core):
+        return hashlib.sha256(cls._canonical_json(core).encode("utf-8")).hexdigest()
+
+    def verify_chain(self):
+        """Return parsed records or raise ValueError on corruption."""
+        raw = self.log_file.read_text(encoding="utf-8")
+        if not raw:
+            return []
+
+        records = []
+        expected_previous = self.ZERO_HASH
+        expected_seq = 0
+        for line_number, line in enumerate(raw.splitlines(), start=1):
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid JSON at line {line_number}") from exc
+
+            if not isinstance(record, dict):
+                raise ValueError(f"invalid record at line {line_number}")
+            seq = record.get("seq")
+            if isinstance(seq, bool) or not isinstance(seq, int) or seq != expected_seq:
+                raise ValueError(f"sequence gap at line {line_number}")
+            if record.get("prev_hash") != expected_previous:
+                raise ValueError(f"previous-hash mismatch at line {line_number}")
+
+            stored_hash = record.get("hash")
+            core = {key: value for key, value in record.items() if key != "hash"}
+            if not isinstance(stored_hash, str) or self._hash_core(core) != stored_hash:
+                raise ValueError(f"hash mismatch at line {line_number}")
+
+            records.append(record)
+            expected_previous = stored_hash
+            expected_seq += 1
+
+        return records
+
+    def log(self, action, user, additional_info=None):
+        """Append one record after validating all existing records."""
+        if not isinstance(action, str) or not action.strip():
+            raise ValueError("action must be a non-empty string")
+        if not isinstance(user, str) or not user.strip():
+            raise ValueError("user must be a non-empty string")
+
+        records = self.verify_chain()
+        previous_hash = records[-1]["hash"] if records else self.ZERO_HASH
+        core = {
+            "seq": len(records),
+            "timestamp": datetime.now().astimezone().isoformat(),
+            "action": action,
+            "user": user,
+            "additional_info": additional_info,
+            "prev_hash": previous_hash,
+        }
+        record = {**core, "hash": self._hash_core(core)}
+        serialized = self._canonical_json(record) + "\n"
+
+        # One writer per file is required; this is not a concurrent-writer lock.
+        with self.log_file.open("a", encoding="utf-8", newline="") as handle:
+            handle.write(serialized)
+            handle.flush()
+            os.fsync(handle.fileno())
+        return record
