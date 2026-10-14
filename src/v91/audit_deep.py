@@ -47,12 +47,25 @@ class AuditDeep:
         return current_hash
 
     def verify_chain(self):
-        """Return False if any payload, sequence, link, or stored hash changed."""
+        """Return False for malformed or modified in-memory records."""
         expected_previous = self.ZERO_HASH
         if len(self.blocks) != len(self.hash_chain):
             return False
         for index, block in enumerate(self.blocks):
-            if block.get("sequence") != index or block.get("prev_hash") != expected_previous:
+            if not isinstance(block, dict):
+                return False
+            if set(block) != {"sequence", "prev_hash", "payload", "hash"}:
+                return False
+            sequence = block.get("sequence")
+            if isinstance(sequence, bool) or not isinstance(sequence, int) or sequence != index:
+                return False
+            previous_hash = block.get("prev_hash")
+            if not isinstance(previous_hash, str) or previous_hash != expected_previous:
+                return False
+            stored_hash = block.get("hash")
+            if not isinstance(stored_hash, str) or len(stored_hash) != 64:
+                return False
+            if any(character not in "0123456789abcdef" for character in stored_hash):
                 return False
             core = {key: value for key, value in block.items() if key != "hash"}
             try:
@@ -61,7 +74,7 @@ class AuditDeep:
                 ).hexdigest()
             except (TypeError, ValueError):
                 return False
-            if block.get("hash") != expected_hash or self.hash_chain[index] != expected_hash:
+            if stored_hash != expected_hash or self.hash_chain[index] != expected_hash:
                 return False
             expected_previous = expected_hash
         return True
