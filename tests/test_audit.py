@@ -34,9 +34,8 @@ class HashChainAuditLoggerTests(unittest.TestCase):
 
     def test_empty_existing_file_fails_closed(self):
         self.path.touch()
-        logger = HashChainAuditLogger(self.path)
         with self.assertRaisesRegex(ValueError, "empty"):
-            logger.log("CREATE", "test-user")
+            HashChainAuditLogger(self.path)
 
     def test_existing_lock_blocks_append(self):
         lock_path = self.path.with_name(self.path.name + ".lock")
