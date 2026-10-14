@@ -45,12 +45,12 @@ class AuditDeep:
 
     def update_chain(self, data: Any) -> str:
         # Validate and canonicalize before mutating in-memory state.
-        self.serialize_data(data)
+        normalized = json.loads(self.serialize_data(data))
         previous = self.hash_chain[-1] if self.hash_chain else self.ZERO_HASH
         block: dict[str, Any] = {
             "sequence": len(self.blocks),
             "prev_hash": previous,
-            "payload": data,
+            "payload": normalized,
         }
         digest = self._hash_block(block)
         block["hash"] = digest
