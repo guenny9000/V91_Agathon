@@ -33,3 +33,37 @@ def test_resource_allocation_rejects_negative_amount():
         pass
     else:
         raise AssertionError("negative allocation must be rejected")
+
+
+
+def test_assessment_rejects_non_string_fields():
+    component = Component1()
+    for field_value in [None, 1, "   "]:
+        try:
+            component.assess(field_value, "impact", "evidence")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"invalid subject accepted: {field_value!r}")
+
+
+def test_allocation_rejects_non_finite_numbers():
+    component = Component2()
+    for amount in [float("nan"), float("inf"), float("-inf")]:
+        try:
+            component.allocate("cpu", amount)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"non-finite allocation accepted: {amount!r}")
+
+
+def test_allocation_rejects_non_string_resource():
+    component = Component2()
+    for resource in [None, 1, "   "]:
+        try:
+            component.allocate(resource, 1)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"invalid resource name accepted: {resource!r}")
