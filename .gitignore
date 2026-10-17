@@ -25,3 +25,4 @@ venv.bak/
 
 # IDEs and editors
 .vscode/
+.snapshots/
