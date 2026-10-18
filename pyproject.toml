@@ -11,11 +11,16 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 keywords = ["V91", "audit", "hash-chain", "Ed25519"]
 dependencies = [
-    "cryptography>=41.0.0",
+    "cryptography>=41.0.0,<46",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+dev = [
+    "pytest>=7",
+    "pytest-cov>=4",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -24,6 +29,53 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["v91*"]
 
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+addopts = "--tb=short -q"
+
+# ---------------------------------------------------------------------------
+# ruff – lint + format (replaces flake8, isort, black, pylint)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "UP",       # pyupgrade
+    "B",        # flake8-bugbear
+    "C4",       # flake8-comprehensions
+    "SIM",      # flake8-simplify
+    "TCH",      # flake8-type-checking (defer TYPE_CHECKING imports)
+    "RUF",      # ruff-specific
+]
+ignore = [
+    "E501",     # line-length handled by formatter
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["v91"]
+
+[tool.ruff.format]
+# Equivalent to black defaults
+quote-style = "double"
+indent-style = "space"
+
+# ---------------------------------------------------------------------------
+# mypy – strict but practical
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+# The cryptography stubs are partial; don't block CI on that
+[[tool.mypy.overrides]]
+module = "cryptography.*"
+ignore_errors = true

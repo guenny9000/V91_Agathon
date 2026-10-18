@@ -1,6 +1,8 @@
-# Development Dependencies
+# Development / test dependencies
+-r requirements.txt
 
-pytest
-pylint
-black
-coverage
+pytest>=7
+pytest-cov>=4
+ruff>=0.4
+mypy>=1.10
+cryptography>=41.0.0

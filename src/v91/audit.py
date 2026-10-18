@@ -36,11 +36,16 @@ class HashChainAuditLogger:
     def _canonical(value: Any) -> bytes:
         try:
             return json.dumps(
-                value, sort_keys=True, separators=(",", ":"),
-                ensure_ascii=False, allow_nan=False,
+                value,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+                allow_nan=False,
             ).encode("utf-8")
         except (TypeError, ValueError) as exc:
-            raise ValueError("Audit data must be JSON-serializable without NaN or Infinity.") from exc
+            raise ValueError(
+                "Audit data must be JSON-serializable without NaN or Infinity."
+            ) from exc
 
     @classmethod
     def _hash_record(cls, record: dict[str, Any]) -> str:
@@ -76,7 +81,10 @@ class HashChainAuditLogger:
         return records
 
     def log(
-        self, action: str, user: str, additional_info: Any = None,
+        self,
+        action: str,
+        user: str,
+        additional_info: Any = None,
     ) -> dict[str, Any]:
         if not isinstance(action, str) or not action.strip():
             raise ValueError("action must be a non-empty string.")
@@ -86,7 +94,9 @@ class HashChainAuditLogger:
         try:
             lock_fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         except FileExistsError as exc:
-            raise RuntimeError("Audit lock exists; inspect it and fail closed rather than deleting it blindly.") from exc
+            raise RuntimeError(
+                "Audit lock exists; inspect it and fail closed rather than deleting it blindly."
+            ) from exc
         try:
             os.write(lock_fd, f"pid={os.getpid()} token={uuid.uuid4().hex}\n".encode("ascii"))
             os.fsync(lock_fd)
@@ -94,7 +104,11 @@ class HashChainAuditLogger:
             previous = records[-1]["hash"] if records else ZERO_HASH
             record: dict[str, Any] = {
                 "seq": len(records),
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z"),
+                "timestamp_utc": (
+                    datetime.now(timezone.utc)
+                    .isoformat(timespec="milliseconds")
+                    .replace("+00:00", "Z")
+                ),
                 "action": action.strip(),
                 "user": user.strip(),
                 "additional_info": additional_info,

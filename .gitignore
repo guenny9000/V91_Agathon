@@ -1,28 +1,62 @@
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized files
 __pycache__/
 *.py[cod]
+*.pyo
 
 # C extensions
 *.so
 
 # Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
 .Python
-env/
+
+# Virtual environments
+.venv/
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
 
-# Virtual environment
-.venv/
-
-# Test and coverage reports
+# Test and coverage
 .pytest_cache/
 .coverage
+coverage.xml
+htmlcov/
 
-# dotenv
+# mypy
+.mypy_cache/
+
+# ruff
+.ruff_cache/
+
+# Secrets / keys – never commit these
+secrets/
+*.key
+*.pem
 .env
+.env.*
+!.env.example
 
-# IDEs and editors
+# Audit artefacts that belong outside the repo
+audits/*.jsonl
+
+# Logs
+logs/
+*.log
+
+# IDE / editor
 .vscode/
-.snapshots/
+.idea/
+*.swp
+*.swo
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Local snapshot diffs (reviewed, not committed)
+.snapshots/
