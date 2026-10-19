@@ -1,4 +1,5 @@
 """Optional Semgrep adapter; never claims a scan unless one is implemented."""
+
 from __future__ import annotations
 
 import importlib.util
