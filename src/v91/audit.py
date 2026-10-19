@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import uuid
+from contextlib import suppress
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -98,7 +99,8 @@ class HashChainAuditLogger:
                 "Audit lock exists; inspect it and fail closed rather than deleting it blindly."
             ) from exc
         try:
-            os.write(lock_fd, f"pid={os.getpid()} token={uuid.uuid4().hex}\n".encode("ascii"))
+            os.write(lock_fd, f"pid={os.getpid()} token={uuid.uuid4().hex}
+".encode("ascii"))
             os.fsync(lock_fd)
             records = self.verify_chain()
             previous = records[-1]["hash"] if records else ZERO_HASH
@@ -115,7 +117,8 @@ class HashChainAuditLogger:
                 "prev_hash": previous,
             }
             record["hash"] = self._hash_record(record)
-            encoded = self._canonical(record) + b"\n"
+            encoded = self._canonical(record) + b"
+"
             fd = os.open(str(self.log_file), os.O_WRONLY | os.O_APPEND)
             try:
                 with os.fdopen(fd, "ab") as stream:
@@ -127,7 +130,5 @@ class HashChainAuditLogger:
             return record
         finally:
             os.close(lock_fd)
-            try:
+            with suppress(FileNotFoundError):
                 lock_path.unlink()
-            except FileNotFoundError:
-                pass
