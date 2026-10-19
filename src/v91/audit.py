@@ -3,6 +3,7 @@
 This logger detects edits and broken sequence links. It does not provide WORM
 storage, independent timestamps, or proof that an event is truthful.
 """
+
 from __future__ import annotations
 
 import hashlib
