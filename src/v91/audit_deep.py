@@ -3,6 +3,7 @@
 These primitives support integrity checks; they do not make storage immutable
 or establish the truth of the signed statement.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -29,11 +30,16 @@ class AuditDeep:
     def serialize_data(data: Any) -> str:
         try:
             return json.dumps(
-                data, sort_keys=True, separators=(",", ":"),
-                ensure_ascii=False, allow_nan=False,
+                data,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+                allow_nan=False,
             )
         except (TypeError, ValueError) as exc:
-            raise ValueError("Audit data must be JSON-serializable without NaN or Infinity.") from exc
+            raise ValueError(
+                "Audit data must be JSON-serializable without NaN or Infinity."
+            ) from exc
 
     @classmethod
     def _hash_block(cls, block: dict[str, Any]) -> str:
