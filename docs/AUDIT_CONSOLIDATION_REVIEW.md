@@ -1,6 +1,6 @@
 # V91 Audit Consolidation Review
 
-Status: IMPLEMENTED ON REVIEW BRANCH; CI and merge are still pending.
+Status: IMPLEMENTED ON REVIEW BRANCH. GitHub Actions passed for commit `7c15e71fa468196a8dd295088f71df7c7bcc8fbd`; the latest documentation-only update will receive its own CI run.
 
 ## Compared implementations
 
@@ -46,7 +46,8 @@ Status: IMPLEMENTED ON REVIEW BRANCH; CI and merge are still pending.
 
 - DOCUMENTED: source comparison and compatibility decision.
 - IMPLEMENTED: additive `ledger` module, tests, public API exports and README on this review branch.
-- PENDING: GitHub Actions results and review of any failures.
+- VERIFIED: GitHub Actions test job, source compilation and package metadata checks passed for commit `7c15e71fa468196a8dd295088f71df7c7bcc8fbd`.
+- PENDING: CI for the subsequent documentation update and final merge.
 - NOT CLAIMED: production deployment, persistent signing keys, WORM storage, external trusted time or autonomous operation.
 
 Claim != evidence. Do not retire the standalone repository until CI is green and the implementation has been reviewed. Retain its Git history as a migration reference.
