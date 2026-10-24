@@ -1,55 +1,52 @@
 # V91 Audit Consolidation Review
 
-Status: DOCUMENTED review; implementation consolidation is not yet complete.
+Status: IMPLEMENTED ON REVIEW BRANCH; CI and merge are still pending.
 
 ## Compared implementations
 
-### Agathon: `src/v91/audit.py`
+### Existing Agathon API: `src/v91/audit.py`
 
 - Persistent JSONL append log; sequence, previous hash and SHA-256 chain are verified.
 - Uses a lock file and fails closed when a lock already exists.
-- Creates a missing log file during logger initialization.
-- Records use the schema `seq`, `user`, `additional_info`, `prev_hash`.
-- Verification currently checks sequence, previous hash and record hash, but does not validate a strict UTC timestamp format or reject a symlink path explicitly.
-- Existing data is not silently reset or migrated.
+- Existing record schema is `seq`, `user`, `additional_info`, `prev_hash` and remains unchanged for compatibility.
+- Current verification does not validate a strict UTC timestamp format or reject a symlink path explicitly.
 
-### V91 Audit Ledger: `v91_audit_ledger.py`
+### Former standalone implementation: `v91_audit_ledger.py`
 
 - Persistent JSONL append and read-only verification CLI.
-- Uses a lock file, rejects symlink ledger paths, rejects blank lines and non-object records, validates UTC timestamp syntax and calendar values, checks sequence, previous hash and SHA-256 hash.
+- Rejects symlink ledger paths, blank lines and non-object records; validates UTC timestamp syntax and calendar values; checks sequence, previous hash and SHA-256 hash.
 - Rejects non-JSON values such as NaN/Infinity before writing.
-- Records use the different schema `sequence`, `actor`, `data`, `previous_hash`.
-- Verification of a missing file reports `VALID_EMPTY` without creating it; append is an explicit separate operation.
-- The ledger warns that a hash chain is not WORM storage and does not prove authorship, event truth or trusted time.
+- Uses a distinct schema: `sequence`, `actor`, `data`, `previous_hash`.
+- Verifying a missing file reports `VALID_EMPTY` without creating it; append is explicit.
+
+### New additive Agathon implementation: `src/v91/ledger.py`
+
+- Ported the stricter standalone behavior into Agathon without replacing the existing logger or changing its stored record schema.
+- Added tests for append/verify, read-only missing-file verification, tampering, legacy data, sequence gaps, invalid JSON values, existing locks, symlink rejection and invalid timestamps.
+- Exposes `LedgerError`, `append_ledger_record`, and `verify_ledger` from the package API.
+- CLI entry point: `python -m v91.ledger --ledger <path> verify` or explicit `append`.
+- Both formats must remain in separate files. No automatic migration or rewriting is performed.
 
 ### Agathon: `src/v91/audit_deep.py`
 
 - Separate in-memory hash chain and Ed25519 signing/verification.
-- Not persistent; a new key is generated at object creation and is not saved.
-- Must not be presented as a replacement for a persistent audit log. A valid signature proves verification against a public key, not that the signed event is true.
+- A new key is generated at object creation and is not saved. It is not a persistent audit log.
 
-## Important differences / potential gaps
+## Safety and compatibility decisions
 
-1. The two persistent loggers overlap in purpose but are not drop-in compatible: their record field names and verification return types differ.
-2. The standalone ledger has stricter timestamp and path validation. These checks should be preserved in any consolidation.
-3. Agathon's logger exposes an existing Python API used by its tests. Replacing it outright risks breaking callers.
-4. The standalone ledger offers an explicit verify/append CLI; Agathon currently exposes a Python logger API. Preserve both use cases if consolidated.
-5. Both rely on local files and hash chains. Neither alone provides WORM immutability, independent time witnessing, external identity assurance, or proof of event truth.
-6. Lock files intentionally fail closed. Stale-lock recovery must remain a manual, evidence-based operation; do not auto-delete locks.
+1. Preserve `HashChainAuditLogger` and its existing file format for callers already using it.
+2. Add the stricter ledger as a separate module, avoiding a silent schema/API break.
+3. Keep missing-file verification read-only; append is an explicit action.
+4. Reject malformed or tampered history and never silently repair, reset, or migrate it.
+5. Do not auto-delete lock files; inspect them before any manual recovery.
+6. Keep `AuditDeep` separate until persistent key storage and a trust model are designed.
+7. Neither local hash chain provides WORM immutability, independent trusted time, proof of event truth, or external identity assurance.
 
-## Recommended sustainable target
+## Evidence status
 
-- Keep Agathon as the maintained home for V91 audit code.
-- Add the stricter standalone ledger capability inside Agathon as a separately named module first, with its tests and CLI behavior preserved.
-- Add compatibility tests before deciding whether to deprecate `HashChainAuditLogger`; do not silently change its record schema or return values.
-- Run CI and review the resulting behavior before merging.
-- Only after successful verification, mark `v91-audit-ledger` as superseded and retain its history/readme as a migration reference. Do not delete or archive it before equivalence is demonstrated.
-- Keep `AuditDeep` separate until durable key storage and a clear trust model exist; do not claim persistent signing or production-grade evidence.
+- DOCUMENTED: source comparison and compatibility decision.
+- IMPLEMENTED: additive `ledger` module, tests, public API exports and README on this review branch.
+- PENDING: GitHub Actions results and review of any failures.
+- NOT CLAIMED: production deployment, persistent signing keys, WORM storage, external trusted time or autonomous operation.
 
-## V91 evidence status
-
-- DOCUMENTED: comparison above, based on the current default-branch source and tests.
-- NOT YET IMPLEMENTED: code consolidation or migration.
-- NOT YET VERIFIED: full cross-implementation compatibility, CI result for this proposed consolidation, production/WORM behavior, external trusted time, persistent signing-key handling.
-
-Claim != evidence. No production or autonomous operation is asserted by this review.
+Claim != evidence. Do not retire the standalone repository until CI is green and the implementation has been reviewed. Retain its Git history as a migration reference.
