@@ -1,8 +1,7 @@
 """Evidence-safe weekly eco report built on the verified V91 JSONL ledger.
 
-The index is an explicitly defined input metric in [0, 1]. Missing values
-remain unknown; malformed or tampered ledger history stops report generation.
-A hash chain detects changes but does not prove the truth of source telemetry.
+Missing measurements remain unknown. A hash chain detects changes but does not
+prove the truth of source telemetry.
 """
 from __future__ import annotations
 
@@ -36,13 +35,11 @@ def generate_weekly_report(
     period_start_utc: str | None = None,
     period_end_utc: str | None = None,
 ) -> dict[str, Any]:
-    """Build a report from verified source records within a UTC time window.
+    """Report source records in [period_start_utc, period_end_utc).
 
-    By default, the report covers the preceding seven days. The window is
-    [period_start_utc, period_end_utc): its start is inclusive and its end
-    exclusive. Report records are never treated as fresh measurements.
-    Records without data.eco_efficiency_index remain missing; values must be
-    finite numbers in [0, 1]. Invalid ledger history fails closed.
+    Defaults to the seven days ending at the current UTC time. Persisted
+    report records are excluded from source measurements. Invalid ledger
+    history and invalid metric values fail closed.
     """
     path = Path(ledger_path)
     verification = verify_ledger(path)
@@ -51,11 +48,7 @@ def generate_weekly_report(
 
     now = datetime.now(timezone.utc)
     end = _parse_utc(period_end_utc, "period_end_utc") if period_end_utc else now
-    start = (
-        _parse_utc(period_start_utc, "period_start_utc")
-        if period_start_utc
-        else end - timedelta(days=7)
-    )
+    start = _parse_utc(period_start_utc, "period_start_utc") if period_start_utc else end - timedelta(days=7)
     if start >= end:
         raise LedgerError("The report period start must be earlier than its end.")
 
@@ -69,12 +62,7 @@ def generate_weekly_report(
                     raise LedgerError(f"Malformed JSON at line {line_number}.") from exc
                 if not isinstance(record, dict):
                     raise LedgerError(f"Ledger line {line_number} must be a JSON object.")
-                # Persisted reports are audit outputs, not new source observations.
                 if record.get("action") == "ECO_WEEKLY_REPORT":
-                    continue
-                timestamp = _parse_utc(record.get("timestamp_utc"), f"line {line_number} timestamp_utc")
-                if start <= timestamp < end:
-                    if record.get("action") == "ECO_WEEKLY_REPORT":
                     continue
                 timestamp = _parse_utc(record.get("timestamp_utc"), f"line {line_number} timestamp_utc")
                 if start <= timestamp < end:
@@ -103,7 +91,7 @@ def generate_weekly_report(
         "source_records": len(records),
         "records_with_metric": len(values),
         "records_missing_metric": missing_count,
-        "average_eco_efficiency_index": (sum(values) / len(values)) if values else None,
+        "average_eco_efficiency_index": sum(values) / len(values) if values else None,
         "metric_status": "MEASURED" if values else "UNKNOWN",
         "integrity_status": "VERIFIED" if verification["status"] == "VALID" else "VALID_EMPTY",
         "source_last_hash": verification["last_hash"],
@@ -111,12 +99,7 @@ def generate_weekly_report(
     }
 
     if persist:
-        appended = append_ledger_record(
-            path,
-            action="ECO_WEEKLY_REPORT",
-            actor=actor,
-            data=report,
-        )
+        appended = append_ledger_record(path, action="ECO_WEEKLY_REPORT", actor=actor, data=report)
         report["persisted"] = True
         report["report_ledger_sequence"] = appended["sequence"]
         report["report_ledger_hash"] = appended["hash"]
