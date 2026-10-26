@@ -8,11 +8,24 @@ from __future__ import annotations
 
 import json
 import math
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 from .ledger import LedgerError, append_ledger_record, verify_ledger
+
+
+def _parse_utc(value: str, field: str) -> datetime:
+    """Parse an explicit UTC timestamp; reject naive or non-UTC timestamps."""
+    if not isinstance(value, str):
+        raise LedgerError(f"{field} must be an ISO-8601 UTC timestamp.")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise LedgerError(f"{field} must be an ISO-8601 UTC timestamp.") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() != timedelta(0):
+        raise LedgerError(f"{field} must include a UTC timezone.")
+    return parsed.astimezone(timezone.utc)
 
 
 def generate_weekly_report(
@@ -20,17 +33,31 @@ def generate_weekly_report(
     *,
     persist: bool = True,
     actor: str = "v91-eco-reporter",
+    period_start_utc: str | None = None,
+    period_end_utc: str | None = None,
 ) -> dict[str, Any]:
-    """Build a report from verified ledger records; optionally append the report.
+    """Build a report from verified source records within a UTC time window.
 
-    Records without data.eco_efficiency_index are counted as missing, not
-    assigned a default score. Present values must be finite numbers in [0, 1].
-    No rows are silently skipped.
+    By default, the report covers the preceding seven days. The window is
+    [period_start_utc, period_end_utc): its start is inclusive and its end
+    exclusive. Report records are never treated as fresh measurements.
+    Records without data.eco_efficiency_index remain missing; values must be
+    finite numbers in [0, 1]. Invalid ledger history fails closed.
     """
     path = Path(ledger_path)
     verification = verify_ledger(path)
     if verification["status"] not in {"VALID", "VALID_EMPTY"}:
         raise LedgerError("Ledger verification did not return a recognized valid state.")
+
+    now = datetime.now(timezone.utc)
+    end = _parse_utc(period_end_utc, "period_end_utc") if period_end_utc else now
+    start = (
+        _parse_utc(period_start_utc, "period_start_utc")
+        if period_start_utc
+        else end - timedelta(days=7)
+    )
+    if start >= end:
+        raise LedgerError("The report period start must be earlier than its end.")
 
     records: list[dict[str, Any]] = []
     if path.exists():
@@ -42,7 +69,12 @@ def generate_weekly_report(
                     raise LedgerError(f"Malformed JSON at line {line_number}.") from exc
                 if not isinstance(record, dict):
                     raise LedgerError(f"Ledger line {line_number} must be a JSON object.")
-                records.append(record)
+                # Persisted reports are audit outputs, not new source observations.
+                if record.get("action") == "ECO_WEEKLY_REPORT":
+                    continue
+                timestamp = _parse_utc(record.get("timestamp_utc"), f"line {line_number} timestamp_utc")
+                if start <= timestamp < end:
+                    records.append(record)
 
     values: list[float] = []
     missing_count = 0
@@ -59,7 +91,10 @@ def generate_weekly_report(
         values.append(float(value))
 
     report: dict[str, Any] = {
-        "report_timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "report_timestamp_utc": now.isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "period_start_utc": start.isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "period_end_utc": end.isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "period_semantics": "START_INCLUSIVE_END_EXCLUSIVE",
         "source_ledger_status": verification["status"],
         "source_records": len(records),
         "records_with_metric": len(values),
