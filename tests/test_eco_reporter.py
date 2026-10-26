@@ -19,6 +19,7 @@ def test_report_averages_only_measured_values_and_counts_missing(tmp_path):
     assert report["average_eco_efficiency_index"] == pytest.approx(0.8)
     assert report["metric_status"] == "MEASURED"
     assert report["persisted"] is False
+    assert report["period_semantics"] == "START_INCLUSIVE_END_EXCLUSIVE"
     assert verify_ledger(ledger)["records"] == 2
 
 
@@ -39,7 +40,10 @@ def test_report_is_appended_to_verified_ledger(tmp_path):
 
     report = generate_weekly_report(ledger, persist=True)
 
+    followup = generate_weekly_report(ledger, persist=False)
     verification = verify_ledger(ledger)
+    assert followup["source_records"] == 1
+    assert followup["records_with_metric"] == 1
     assert report["persisted"] is True
     assert report["report_ledger_sequence"] == 1
     assert verification["status"] == "VALID"
@@ -75,3 +79,49 @@ def test_tampered_ledger_blocks_report_and_does_not_repair(tmp_path):
     with pytest.raises(LedgerError, match="Hash mismatch"):
         generate_weekly_report(ledger, persist=True)
     assert ledger.read_bytes() == damaged
+
+
+
+def test_weekly_report_excludes_records_outside_period(tmp_path):
+    from v91.ledger import ZERO_HASH, record_hash
+
+    ledger = tmp_path / "audit.jsonl"
+    append_ledger_record(ledger, "METRIC", "test", {"eco_efficiency_index": 0.2})
+    append_ledger_record(ledger, "METRIC", "test", {"eco_efficiency_index": 0.8})
+    rows = [json.loads(line) for line in ledger.read_text(encoding="utf-8").splitlines()]
+    rows[0]["timestamp_utc"] = "2026-10-18T23:59:59Z"
+    rows[1]["timestamp_utc"] = "2026-10-25T12:00:00Z"
+    previous = ZERO_HASH
+    for index, row in enumerate(rows):
+        row["sequence"] = index
+        row["previous_hash"] = previous
+        row["hash"] = record_hash(row)
+        previous = row["hash"]
+    ledger.write_text(
+        "".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+    report = generate_weekly_report(
+        ledger, persist=False,
+        period_start_utc="2026-10-19T00:00:00Z",
+        period_end_utc="2026-10-26T00:00:00Z",
+    )
+    assert report["source_records"] == 1
+    assert report["average_eco_efficiency_index"] == pytest.approx(0.8)
+
+
+@pytest.mark.parametrize(
+    ("start", "end"),
+    [
+        ("2026-10-26T00:00:00Z", "2026-10-26T00:00:00Z"),
+        ("2026-10-27T00:00:00Z", "2026-10-26T00:00:00Z"),
+        ("2026-10-19T00:00:00", "2026-10-26T00:00:00Z"),
+    ],
+)
+def test_invalid_report_period_fails_closed(tmp_path, start, end):
+    with pytest.raises(LedgerError):
+        generate_weekly_report(
+            tmp_path / "audit.jsonl", persist=False,
+            period_start_utc=start, period_end_utc=end,
+        )
