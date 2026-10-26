@@ -59,12 +59,6 @@ def generate_weekly_report(
     if start >= end:
         raise LedgerError("The report period start must be earlier than its end.")
 
-    now = datetime.now(timezone.utc)
-    end = _parse_utc(period_end_utc, "period_end_utc") if period_end_utc else now
-    start = _parse_utc(period_start_utc, "period_start_utc") if period_start_utc else end - timedelta(days=7)
-    if start >= end:
-        raise LedgerError("The report period start must be earlier than its end.")
-
     records: list[dict[str, Any]] = []
     if path.exists():
         with path.open("r", encoding="utf-8") as stream:
