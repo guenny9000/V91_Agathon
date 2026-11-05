@@ -30,7 +30,7 @@ def _parse_utc(value: str, field: str) -> datetime:
 def generate_weekly_report(
     ledger_path: str | Path,
     *,
-    persist: bool = True,
+    persist: bool = False,
     actor: str = "v91-eco-reporter",
     period_start_utc: str | None = None,
     period_end_utc: str | None = None,
@@ -40,6 +40,9 @@ def generate_weekly_report(
     Defaults to the seven days ending at the current UTC time. Persisted
     report records are excluded from source measurements. Invalid ledger
     history and invalid metric values fail closed.
+
+    Report generation is read-only by default. Appending a report requires
+    an explicit persist=True argument.
     """
     path = Path(ledger_path)
     verification = verify_ledger(path)
