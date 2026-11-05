@@ -34,6 +34,18 @@ def test_no_metric_is_unknown_not_a_fabricated_default(tmp_path):
     assert report["records_missing_metric"] == 1
 
 
+def test_report_defaults_to_read_only(tmp_path):
+    ledger = tmp_path / "audit.jsonl"
+    append_ledger_record(ledger, "METRIC", "test", {"eco_efficiency_index": 0.7})
+    before = ledger.read_bytes()
+
+    report = generate_weekly_report(ledger)
+
+    assert report["persisted"] is False
+    assert ledger.read_bytes() == before
+    assert verify_ledger(ledger)["records"] == 1
+
+
 def test_report_is_appended_to_verified_ledger(tmp_path):
     ledger = tmp_path / "audit.jsonl"
     append_ledger_record(ledger, "METRIC", "test", {"eco_efficiency_index": 0.6})
@@ -53,7 +65,9 @@ def test_report_is_appended_to_verified_ledger(tmp_path):
     assert saved_report["data"]["average_eco_efficiency_index"] == pytest.approx(0.6)
 
 
-@pytest.mark.parametrize("bad_value", [True, "0.9", float("nan"), float("inf"), -0.1, 1.1])
+@pytest.mark.parametrize("bad_value", [
+    True, "0.9", float("nan"), float("inf"), -0.1, 1.1
+])
 def test_invalid_metric_fails_closed(tmp_path, bad_value):
     ledger = tmp_path / "audit.jsonl"
     # The ledger permits JSON-compatible metric payloads, but the reporter
@@ -79,7 +93,6 @@ def test_tampered_ledger_blocks_report_and_does_not_repair(tmp_path):
     with pytest.raises(LedgerError, match="Hash mismatch"):
         generate_weekly_report(ledger, persist=True)
     assert ledger.read_bytes() == damaged
-
 
 
 def test_weekly_report_excludes_records_outside_period(tmp_path):
