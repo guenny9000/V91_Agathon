@@ -28,12 +28,16 @@ class HashChainAuditLogger:
     def __init__(self, log_file: str | os.PathLike[str]) -> None:
         self.log_file = Path(log_file)
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
+        # A file created by THIS instance may be empty until the first append;
+        # a pre-existing empty file is a broken state and fails closed.
+        self._created_here = False
         try:
             fd = os.open(self.log_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         except FileExistsError:
             # Existing data is verified, never reset or migrated implicitly.
             self.verify_chain()
         else:
+            self._created_here = True
             with os.fdopen(fd, "w", encoding="utf-8") as stream:
                 stream.flush()
                 os.fsync(stream.fileno())
@@ -63,13 +67,12 @@ class HashChainAuditLogger:
         except ValueError as exc:
             raise ValueError("Audit record timestamp is not valid ISO-8601 UTC.") from exc
 
-    def verify_chain(self) -> list[dict[str, Any]]:
-        if not self.log_file.exists():
-            return []
+    def _read_verified(self) -> list[dict[str, Any]]:
+        """Load and verify records; an empty file is only valid if WE created it."""
         raw = self.log_file.read_text(encoding="utf-8")
         if not raw.strip():
-            # An existing empty file is a broken state, not a valid chain
-            # (fail-closed, ported from PR #1).
+            if self._created_here:
+                return []
             raise ValueError("Audit file exists but is empty; refusing to treat it as a valid chain.")
         records: list[dict[str, Any]] = []
         expected_prev = ZERO_HASH
@@ -100,6 +103,11 @@ class HashChainAuditLogger:
             records.append(record)
         return records
 
+    def verify_chain(self) -> list[dict[str, Any]]:
+        if not self.log_file.exists():
+            return []
+        return self._read_verified()
+
     def log(
         self, action: str, user: str, additional_info: Any = None,
     ) -> dict[str, Any]:
@@ -116,7 +124,7 @@ class HashChainAuditLogger:
         try:
             os.write(lock_fd, f"pid={os.getpid()} token={token}\n".encode("ascii"))
             os.fsync(lock_fd)
-            records = self.verify_chain()
+            records = self._read_verified()
             previous = records[-1]["hash"] if records else ZERO_HASH
             record: dict[str, Any] = {
                 "seq": len(records),
@@ -133,6 +141,7 @@ class HashChainAuditLogger:
                 stream.write(encoded)
                 stream.flush()
                 os.fsync(stream.fileno())
+            self._created_here = False  # after the first append this is a real chain
             return record
         finally:
             os.close(lock_fd)
