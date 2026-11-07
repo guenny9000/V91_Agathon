@@ -51,7 +51,7 @@ def verify_ledger(path: str | os.PathLike[str]) -> dict[str, Any]:
         raise LedgerError("Ledger path is not a regular file.")
     raw = ledger.read_text(encoding="utf-8")
     if not raw:
-        return {"status": "VALID_EMPTY", "records": 0, "last_hash": ZERO_HASH}
+        raise LedgerError("Existing ledger file is empty; refusing to assume history is empty.")
 
     previous = ZERO_HASH
     count = 0
@@ -117,8 +117,11 @@ def append_ledger_record(
             with os.fdopen(fd, "wb") as stream:
                 stream.flush()
                 os.fsync(stream.fileno())
-
-        verified = verify_ledger(ledger)
+            # This call created the new empty file while holding the lock.
+            # Do not treat a pre-existing empty file as an empty history.
+            verified = {"status": "VALID_EMPTY", "records": 0, "last_hash": ZERO_HASH}
+        else:
+            verified = verify_ledger(ledger)
         item: dict[str, Any] = {
             "sequence": verified["records"],
             "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z"),
