@@ -28,6 +28,19 @@ def test_missing_ledger_verification_does_not_create_file(tmp_path):
     assert not path.exists()
 
 
+def test_existing_empty_ledger_fails_closed_and_append_preserves_it(tmp_path):
+    path = tmp_path / "empty.jsonl"
+    path.write_bytes(b"")
+    before = path.read_bytes()
+
+    with pytest.raises(LedgerError, match="Existing ledger file is empty"):
+        verify_ledger(path)
+    with pytest.raises(LedgerError, match="Existing ledger file is empty"):
+        append_ledger_record(path, "TASK_COMPLETED", "worker-a", {"status": "done"})
+
+    assert path.read_bytes() == before
+
+
 def test_tampering_fails_closed_and_append_does_not_repair(tmp_path):
     path = tmp_path / "audit.jsonl"
     append_ledger_record(path, "TASK_STARTED", "worker-a", {"purpose": "check"})
