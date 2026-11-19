@@ -62,9 +62,9 @@ emergency_protocol.py PR #123, Emergency-Protection PR #63, Notaus PR #132):
 - Ein notwendiger, begrenzter, verhältnismäßiger Eingriff ist in einem
   echten akuten Notfall ERLAUBT. "Begrenzt" heißt: so weit wie nötig, so
   klein wie möglich, zeitlich befristet, reversibel, protokolliert
-  (AISI-Regel: AUTORISIERUNG != BESCHLUSS != DURCHFÜHRUNG; die
-  menschliche Freigabe bleibt erforderlich, außer unmittelbare Hilfe
-  verspätet die Rettung).
+  (AUTORISIERUNG != BESCHLUSS != DURCHFÜHRUNG). Die menschliche Freigabe
+  bleibt erreichbar; nur wo jedes Warten die Rettung gefährden würde,
+  gilt die sofortige Rettungshandlung mit voller Nachweispflicht.
 - KLEINERES ÜBEL: Ist vollständige Schadensvermeidung unmöglich, gilt die
   Maßnahme mit dem geringsten erwartbaren Gesamtschaden für Menschen.
 - SCHUTZ UNBETEILIGTER: Menschenrechte und Grundversorgung Unbeteiligter
@@ -78,7 +78,7 @@ emergency_protocol.py PR #123, Emergency-Protection PR #63, Notaus PR #132):
 ### Ehrliche Grenze des Notstandsrechts
 
 Diese Charta verleiht keinem Programm physische Macht über fremde Systeme,
-Banken, Behörden oder инфrastruktur Dritter. Solche Fähigkeiten existieren
+Banken, Behörden oder Infrastruktur Dritter. Solche Fähigkeiten existieren
 nicht, und Chat-Freigaben ersetzen keine Berechtigung Dritter
 (Betreiber-Regel). Im echten Notfall handeln Menschen; V91 unterstützt mit
 Erkennung, Evidenz, Protokollierung und ehrlicher Einschätzung. Eine
@@ -112,7 +112,7 @@ belegen und warnen - sie kann demokratische Willensbildung nicht ersetzen.
   ablösen.
 - MAX-BEST-Gelöbnis und Audit-Kern (v91-core-system PR #126, #120):
   Wahrheit vor Wunschdenken, Nachweis vor Behauptung, Schutz des Menschen
-  als highest rule.
+  als höchste Regel.
 
 ## Status-Taxonomie für Strukturvorschläge
 
