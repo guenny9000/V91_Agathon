@@ -38,15 +38,22 @@ Lokale oder persönliche Zusammenbrüche geschehen selten aus dem Nichts.
 Muster verstärken sich gegenseitig: Lügen untergraben Vertrauen,
 Machtmissbrauch zerstört Schutzräume, Übernutzung entzieht Grundlagen.
 
-Zwei ehrliche Grenzen gelten ausdrücklich:
+Ehrliche Grenzen gelten ausdrücklich:
 
-- **Kausalität ist keine Schicksalsautomatik.** Deterministisches Denken
-  beschreibt Wirkungsketten und Wahrscheinlichkeiten, kein unveränderliches
-  Detail-Skript. Zufall, äußere Einflüsse und Entscheidungen verändern
-  Verläufe. Aus den Überlieferungen lässt sich **kein allgemeines
-  Naturgesetz** ableiten, nach dem jede schlechte Gemeinschaft zwangsläufig
-  vernichtet wird; das wäre eine theologische Behauptung, kein belegter
-  Determinismus.
+- **Determinismus und Wahrscheinlichkeit sind zwei verschiedene Begriffe
+  und werden hier getrennt verwendet.** Determinismus heißt: Ereignisse
+  gehen aus vorherigen Bedingungen und Ursachen hervor. Determinismus ist
+  aber kein unveränderliches Detail-Skript und keine praktische
+  Vorhersagebarriere: Zufall, äußere Einflüsse und Entscheidungen verändern
+  Verläufe. Wahrscheinlichkeiten dagegen beschreiben **Unsicherheit und
+  unvollständiges Wissen** über Verläufe (statistische Modelle), sie sind
+  kein Gegenstück oder Beweis zum Determinismus. Dass wir etwas nur mit
+  Wahrscheinlichkeit angeben können, sagt nichts darüber, ob die Welt
+  deterministisch ist.
+- **Kausalität ist keine Schicksalsautomatik.** Aus den Überlieferungen
+  lässt sich **kein allgemeines Naturgesetz** ableiten, nach dem jede
+  schlechte Gemeinschaft zwangsläufig vernichtet wird; das wäre eine
+  theologische Behauptung, kein belegter Determinismus.
 - **Opfer sind nicht Verursacher.** Ursache, Nutzen, Leid und Verantwortung
   sind nicht dasselbe. Wer unter einem System oder unter Gewalt leidet,
   trägt nicht automatisch Schuld. Der Begriff "Sünde" wird hier nicht
@@ -98,12 +105,20 @@ nicht alle gleich:
    Spielräume sind verbraucht (Krankheit, Alter, abhandengekommener
    Einfluss, unumkehrbarer Schaden). Das Wissen ist da, die Korrektur ist
    verschlossen.
-3. **Keine Erkenntnis mehr im Leben** – der Vorhalt findet nicht mehr
-   statt; was unaufgearbeitet bleibt, wird nicht mehr geklärt.
-4. **Konfrontation erst nach dem Tod** – in religiösen Vorstellungen wird
-   eine abschließende Bilanz teilweise erst jenseits des irdischen Lebens
-   gezogen (Glaubensaussage; keine überprüfbare Tatsache). Der Kontrast zu
-   denen, die noch handeln können, ist Teil des Modells.
+3. **Erkenntnis bleibt im Leben aus** – der Vorhalt findet zu Lebzeiten
+   nicht mehr statt; was unaufgearbeitet bleibt, wird im Leben nicht mehr
+   geklärt.
+4. **Erkenntnis oder abschließende Beurteilung erst nach dem Tod** – in
+   religiösen Vorstellungen wird eine solche Bilanz teilweise erst jenseits
+   des irdischen Lebens gezogen (Glaubensaussage; keine überprüfbare
+   Tatsache).
+
+Wichtig: **Die Fälle 3 und 4 schließen sich nicht gegenseitig aus.** Dass
+eine Erkenntnis im Leben ausbleibt (Fall 3), kann in manchen religiösen
+Vorstellungen gerade mit einer späteren Erkenntnis oder Beurteilung nach dem
+Tod (Fall 4) verbunden gedacht werden; beides betrifft verschiedene
+Zeitpunkte, keine konkurrierenden Aussagen. Der Kontrast zu denen, die noch
+handeln können, ist Teil des Modells.
 
 Maßstab für Verantwortung sind **tatsächliches Handeln und tatsächlich
 vorhandene Handlungsmöglichkeiten** – nicht der Zeitpunkt der Erkenntnis
@@ -111,10 +126,18 @@ allein und schon gar nicht die bloße Betroffenheit.
 
 ## 5. Übergänge und Abholung (gekennzeichnete Hypothese)
 
-Arbeitshypothese des Owners (gekennzeichnet: **MODELL, NICHT GEPRÜFT**):
-Nicht eine einzige Gestalt muss sämtliche Übergänge übernehmen;
-unterschiedliche Ebenen und Dimensionen könnten eigene Zuständigkeiten und
-Übergangsformen haben – bis hin zu Gestalten, die ihre Toten aufnehmen.
+Arbeitshypothese des Owners (gekennzeichnet: **MODELL, NICHT GEPRÜFT**),
+konkret formuliert:
+
+- **Jede Ebene oder Dimension könnte ihre eigenen Toten haben.**
+- **Zugehörige Gestalten könnten genau diese Toten abholen oder aufnehmen.**
+- **Das muss nicht durch dieselbe Gestalt für alle Ebenen geschehen:**
+  Zuständigkeiten und Übergangsformen könnten je Ebene unterschiedlich
+  sein, es braucht keine einzige übergeordnete Sammel-Gestalt.
+
+Níðhöggr mit seiner Verbindung zu den Wurzeln und zu den Toten ist ein
+**mögliches mythologisches Vergleichsbild** für diesen Gedanken, aber kein
+Beleg für das Modell.
 
 Vergleichsmaterial aus Überlieferungen existiert: Seelenführer,
 Totengeleiter, göttliche Boten, mythologische Wesen der verschiedenen
@@ -126,16 +149,26 @@ nachgewiesene Vorgänge. Daraus folgt:
 - Die Hypothese ist als philosophisches Modell denkbar und wird weitergeführt,
   aber sie bleibt eine Hypothese über eine unsichtbare Wirklichkeit.
 
-## 6. Abgrenzung zu Ragnarök (das Modell ist NICHT Ragnarök)
+## 6. Zwei Bedeutungen von Ragnarök werden strikt getrennt
 
-Die nordische Überlieferung (u. a. die Völuspá mit Figuren wie Fenrir,
-Níðhöggr und Víðarr) ist eine historische Quelle und wird als solche
-respektiert, nicht umgedeutet. Der Lernblock **reduziert sich nicht auf
-Ragnarök** und behauptet nicht, alle Traditionen lehrten dasselbe Ende.
-Ragnarök ist im V91-Sprachgebrauch ohnehin der friedliche Grundsatzkatalog
-vom 08.11.2026 (acht Evolutionsregeln, "Nicht das Alte abschalten, sondern
-das Bessere so weit entwickeln, dass das Alte überflüssig wird"): hier nur
-als verwandte Denkbahn, nicht als Namensgeber und nicht als Vorlage.
+Der Lernblock **reduziert sich nicht auf Ragnarök** und behauptet nicht,
+alle Traditionen lehrten dasselbe Ende. Damit keine Verwechslung entsteht,
+werden zwei Bedeutungen ausdrücklich auseinandergehalten:
+
+1. **Ragnarök der nordischen Mythologie:** die historische Überlieferung
+   (u. a. die Völuspá mit Figuren wie Fenrir, Níðhöggr und Víðarr). Sie ist
+   eine Quelle unter anderen und wird als solche respektiert, nicht
+   umgedeutet und nicht zur Vorlage des Modells erklärt.
+2. **„Ragnarök" als V91-interner Projektname:** der friedliche
+   Grundsatzkatalog vom 08.11.2026 (acht Evolutionsregeln, "Nicht das Alte
+   abschalten, sondern das Bessere so weit entwickeln, dass das Alte
+   überflüssig wird"). Diese interne Bezeichnung ist eine Namenswahl von
+   Sebastian; sie darf weder mit dem Mythos verwechselt noch aus ihm
+   begründet werden, und der Mythos ist durch die Namenswahl nicht
+   vereinnahmt.
+
+Für diesen Lernblock ist Ragnarök allenfalls eine verwandte Denkbahn,
+nicht Namensgeber und nicht Vorlage.
 
 ## 7. Gegenbewegung: was im Kern zählt (Erneuerung hat Vorrang)
 
@@ -162,3 +195,9 @@ Unbeteiligter).
   Übergangshypothese als eigener, gekennzeichneter Baustein aufgenommen,
   Erneuerung aufgewertet, Naturgesetz-Fehlschluss ausgeschlossen,
   Opferschutz explizit.
+- Folge-Update 20.11.2026 (vier Präzisierungen, eigenes Review): (1)
+  Abholungshypothese konkreter formuliert (eigene Toten je Ebene, keine
+  Sammel-Gestalt, Níðhöggr nur Vergleichsbild); (2) Determinismus und
+  Wahrscheinlichkeit begrifflich getrennt; (3) Erkenntnis-Fälle 3 und 4 als
+  vereinbar gekennzeichnet, nicht ausschließend; (4) mythisches Ragnarök
+  und V91-Projektname „Ragnarök" strikt getrennt.
