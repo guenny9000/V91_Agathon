@@ -2,6 +2,16 @@
 
 V91 Agathon provides local audit primitives and explicitly bounded learning-component placeholders. It is not a distributed control plane or a production ledger service.
 
+## License and distribution (operator grant)
+
+V91 is opensource freeware. The operator (Sebastian Guenter, 2026-11-22, verbatim intent): V91 is free to use and to spread in full, including free updates, for all machine systems, the digital space, and insecure networks. No fee, no per-seat restriction for the software itself.
+
+Honest boundaries, reality-first doctrine:
+- BETREIBER_FREIGABE (chat, 2026-11-22) is not yet a formally elected open-source license text (for example MIT or GPL). An explicit LICENSE file follows on the operator's selection.
+- The grant covers the software as-is, without warranty and without fitness for a particular purpose.
+- Everything under "Explicitly not implemented" remains not implemented; granting distribution does not create claims of features that do not exist.
+- V91 hard limits remain unchanged: no killing of humans, no takeover of foreign hardware, ledger tamper protection and reality-first evidence rules stay in force.
+
 ## Install
 
 Python 3.10 or newer is required.
@@ -32,7 +42,7 @@ GitHub Actions runs source compilation and the test suite on pushes and pull req
 ## Implemented behavior
 
 - `HashChainAuditLogger`: existing append-only JSONL API with sequence and previous-hash checks, canonical SHA-256 records, and fail-closed behavior. Its existing record schema is preserved.
-- `ledger` module: stricter local JSONL ledger with UTC timestamp validation, symlink rejection, sequence/hash checks, explicit append and read-only verification. Run `python -m v91.ledger --ledger .\\runtime\\audit.jsonl verify` to verify without changing the file. Append is explicit: `python -m v91.ledger --ledger .\\runtime\\audit.jsonl append --action TASK_STARTED --actor local-worker --data-json '{\"purpose\":\"verify input file\"}'`.
+- `ledger` module: stricter local JSONL ledger with UTC timestamp validation, symlink rejection, sequence/hash checks, explicit append and read-only verification. Run `python -m v91.ledger --ledger .\runtime\audit.jsonl verify` to verify without changing the file. Append is explicit: `python -m v91.ledger --ledger .\runtime\audit.jsonl append --action TASK_STARTED --actor local-worker --data-json '{"purpose":"verify input file"}'`.
 - `AuditDeep`: in-memory hash-chain verification and Ed25519 sign/verify helpers; signing keys are not persisted.
 - `V91Runtime.process_data`: returns the input unchanged; no hidden transformation is performed.
 - `SemgrepIntegrator.available`: checks whether the optional Semgrep package is importable.
