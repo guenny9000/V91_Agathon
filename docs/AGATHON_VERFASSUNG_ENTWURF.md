@@ -141,23 +141,22 @@ symbolisch beklagt (Muster: ~23 Prozent Trinkwasserverluste vor Abrechnung,
 europäische Auswertung).
 Pruefkriterium (messbar): Liegt fuer jedes Versorgungsobjekt eine
 Verlustmessung (Methode + Zeitraum + Quelle + Baseline) vor, und ist eine
- Vorher/Nachher-Differenzmessung (Vorher/Nachher mit Interventionsnachweis)
+Vorher/Nachher-Differenzmessung mit Interventionsnachweis
  definiert? Ohne Baseline ist die Einsparungsziffer eine Behauptung.
-V91-Baustein: Dauerfluss-Detektor (sustained_flow) sustained_flow (PR #422) und
+V91-Baustein: Dauerfluss-Detektor sustained_flow (PR #422) und
 Verlust-Differenzrechnung impact.py/net_saving (PR #421/#423) als Muster.
 
-### Domäne D5:Duerre-/Niedrigwasser-Kettenreaktionen
+### Domäne D5: Duerre-/Niedrigwasser-Kettenreaktionen
 Use Case: Wasser, Strom, Verkehr, Telekommunikation sind voneinander abhaengig;
 uebergreifende Belastungstests muessen die KETTE pruefen, nicht nur Teile
-(Muster: Rhein-Niedrigwasser -> Fracht auf ~20 Prozent, Cernavoda/Paks-
-  Drosselung, 2026).
-Pruefkriterium (messbar): Existiert je Versorgungsgebiet ein KETTEN-Belastungstest mit definierten Koppelpunkten und dokumentiertem Testlauf vorliegen?
+(Muster: Rhein-Niedrigwasser -> Fracht auf ~20 Prozent, Cernavoda/Paks-Drosselung, 2026).
+Pruefkriterium (messbar): Existiert je Versorgungsgebiet ein dokumentiert durchlaufener KETTEN-Belastungstest mit definierten Koppelpunkten (Protokoll/Quelle)?
 Kettentest ohne Lauf = DRAFT, nie "bestanden".
 V91-Baustein: EEA-Forderung "gemeinsame Belastungstests ganzer
 Infrastrukturnetze" (Berichtslage 23.11.2026) als Referenzskizze; eigene
 Simulation ohne Messdaten bleibt MODEL != MEASUREMENT (PR #114).
 
-### Domäne D6: Energie-LegacyTransition und Speicher-Alternativen
+### Domäne D6: Energie-Legacy-Transition und Speicher-Alternativen
 Use Case: Fossile Legacy-Strukturen (Oel & Gas, Muster: Norwegen/Equinor,
 Cyberangriff 17.11.2026, Produktion unbeeinflusst dank OT/IT-Trennung) werden
 durch messbare Alternativen UEBERFLUESSIG gemacht, nicht durch Escalation oder
