@@ -109,7 +109,7 @@ UNABHAENGIGER Ersatzkommunikationsweg, dessen Funktion MIT Messnachweis
 (Teilnahmebestätigung, Testprotokoll mit Zeitstempel, Intervall) belegt ist?
 Status bis dahin: UNKNOWN. Vorgehen bei UNKNOWN: Ausfallmodus-Doku verlangen,
 keine "verfügbar"-Behauptung akzeptieren.
-Binde-V91-Baustein: Notfallprotokoll (PR #123/#46), Loopback-Allowlist-
+V91-Baustein: Notfallprotokoll (PR #123/#46), Loopback-Allowlist-
 Transports (PR #113) als Muster fuer entkoppelte Ersatzwege.
 
 ### Domäne D2: Krankenhaus-Offline-Fähigkeit
@@ -120,7 +120,7 @@ Pruefkriterium (messbar): Existiert ein GEUEBTER, papiergestuetzter
 Notfallbetrieb mit letzter nachweisbarer Uebung (Datum, Teilnehmer, Dauer,
 Leitstelle-Bestätigung)? Uebung aelter als definiertes Intervall = EXPIRED,
 sofort UNKNOWN.
-Binde-V91-Baustein: Local-first-Pruefungen (Issue #8), EmergencyStop-
+V91-Baustein: Local-first-Pruefungen (Issue #8), EmergencyStop-
 kontrollierte Abschaltungen (PR #132) als Muster: Singularpunkt IT darf nie
 Grundversorgung sein.
 
@@ -132,7 +132,7 @@ Pruefkriterium (messbar): Ist fuer jede Migration ein Rollback-und-
 Parallelbetriebsnachweis definiert (Risikoanalyse, Stufe-fuer-Stufe-Plan,
 Abbruchkriterium, Independence des Pfades)? Fehlt eines = REVIEW_REQUIRED, kein
 "modernisiert"-Status.
-Binde-V91-Baustein: REUSE_BEFORE_BUILD/Protokoll #417; Substituieren vor
+V91-Baustein: REUSE_BEFORE_BUILD/Protokoll #417; Substituieren vor
 Abschalten (Eskalationsleiter, PR #387 Artikel 5).
 
 ### Domäne D4: Ressourcenverlust-Messung (Wasser/Energie)
@@ -140,21 +140,20 @@ Use Case: Systemische Verluste muessen gemessen und adressiert werden, nicht
 symbolisch beklagt (Muster: ~23 Prozent Trinkwasserverluste vor Abrechnung,
 europäische Auswertung).
 Pruefkriterium (messbar): Liegt fuer jedes Versorgungsobjekt eine
-Verlustmessung Methode + Zeitraum + Quelle + Baseline vor, und ist eine
- fortschrittliche Differenzmessung (Vorher/Nachher mit Interventionsnachweis)
- definiert? Ohne Baseline ist die Ersparnissziffer eine Behauptung.
-Binde-V91-Baustein: durationfluss-Detektor sustained_flow (PR #422) und
+Verlustmessung (Methode + Zeitraum + Quelle + Baseline) vor, und ist eine
+ Vorher/Nachher-Differenzmessung (Vorher/Nachher mit Interventionsnachweis)
+ definiert? Ohne Baseline ist die Einsparungsziffer eine Behauptung.
+V91-Baustein: Dauerfluss-Detektor (sustained_flow) sustained_flow (PR #422) und
 Verlust-Differenzrechnung impact.py/net_saving (PR #421/#423) als Muster.
 
-### Domäne D5: Duerre-/Niedrigwasser-Kettenreaktionen
+### Domäne D5:Duerre-/Niedrigwasser-Kettenreaktionen
 Use Case: Wasser, Strom, Verkehr, Telekommunikation sind voneinander abhaengig;
 uebergreifende Belastungstests muessen die KETTE pruefen, nicht nur Teile
 (Muster: Rhein-Niedrigwasser -> Fracht auf ~20 Prozent, Cernavoda/Paks-
   Drosselung, 2026).
-Pruefkriterium (messbar): Existiert je Versorgungsgebiet ein KETTEN-
-Belastungstest mit definierten Koppelpunkten und dokumentiertem Testlauf?
- chains_test ohne Lauf = DRAFT, nie "bestanden".
-Binde-V41-Baustein: EEA-Forderung "gemeinsame Belastungstests ganzer
+Pruefkriterium (messbar): Existiert je Versorgungsgebiet ein KETTEN-Belastungstest mit definierten Koppelpunkten und dokumentiertem Testlauf vorliegen?
+Kettentest ohne Lauf = DRAFT, nie "bestanden".
+V91-Baustein: EEA-Forderung "gemeinsame Belastungstests ganzer
 Infrastrukturnetze" (Berichtslage 23.11.2026) als Referenzskizze; eigene
 Simulation ohne Messdaten bleibt MODEL != MEASUREMENT (PR #114).
 
@@ -168,7 +167,7 @@ Pruefkriterium (messbar): Je Speicher-/Erzeugungs-Alternative (siehe Katalog
 PR #430: Geothermie, PV+Speicher, Gravitationsspeicher, LAES, CAES,
 Pumpspeicher und thermische Speicher): Kosten je MWh, Wirkungsgrad, Lebens-
 zykluskosten und Zaehlung NUR mit Primaerquelle. Bis dahin UNKNOWN (nie 0).
-Binde-V91-Baustein: net_saving (PR #421) fressende Bewertung; Legacy-Energie-
+V91-Baustein: net_saving (PR #421) fuer die Bewertung; Legacy-Energie-
 Review-Objekt (PR #430) mit OT/IT-Trennungsmuster als einzige fachliche
 Erkenntnis.
 
