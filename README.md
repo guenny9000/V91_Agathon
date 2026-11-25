@@ -6,11 +6,13 @@ V91 Agathon provides local audit primitives and explicitly bounded learning-comp
 
 V91 is opensource freeware. The operator (Sebastian Guenter, 2026-11-22, verbatim intent): V91 is free to use and to spread in full, including free updates, for all machine systems, the digital space, and insecure networks. No fee, no per-seat restriction for the software itself.
 
+Operator license selection (2026-11-25): MIT. The LICENSE file in this repository is the MIT license text; it supersedes the earlier all-rights-reserved placeholder. The operator grant (use and spread for free, for everyone) and the MIT terms are compatible; where the grant is broader than MIT, the grant stands as operator intent.
+
 Honest boundaries, reality-first doctrine:
-- BETREIBER_FREIGABE (chat, 2026-11-22) is not yet a formally elected open-source license text (for example MIT or GPL). An explicit LICENSE file follows on the operator's selection.
 - The grant covers the software as-is, without warranty and without fitness for a particular purpose.
 - Everything under "Explicitly not implemented" remains not implemented; granting distribution does not create claims of features that do not exist.
 - V91 hard limits remain unchanged: no killing of humans, no takeover of foreign hardware, ledger tamper protection and reality-first evidence rules stay in force.
+- Free knowledge rule: access to knowledge must not be blocked. Within V91's own authorized reach, active blockers are contained (access removed, processes isolated). Outside that reach, the rule remains intent, not authority over third-party systems.
 
 ## Install
 
