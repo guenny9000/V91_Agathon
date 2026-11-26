@@ -88,6 +88,26 @@ def test_multinode_start_failure_rolls_back_in_reverse_order():
     assert orchestrator.active_nodes == ()
 
 
+def test_multinode_rollback_failure_keeps_reverse_retry_order():
+    events = []
+    orchestrator = MultiNodeOrchestrator()
+    first = FakeLocalNode("first", events, fail_stops=1)
+    failing = FakeLocalNode("failing", events, fail_start=True, fail_stops=1)
+    orchestrator.add_node(first)
+    orchestrator.add_node(failing)
+
+    with pytest.raises(NodeLifecycleError) as caught:
+        orchestrator.start()
+
+    assert caught.value.operation == "start"
+    assert len(caught.value.failures) == 3
+    assert orchestrator.active_nodes == (first, failing)
+
+    orchestrator.stop()
+    assert orchestrator.active_nodes == ()
+    assert events[-2:] == [("failing", "stop"), ("first", "stop")]
+
+
 def test_multinode_stop_attempts_all_nodes_and_can_retry_failure():
     events = []
     orchestrator = MultiNodeOrchestrator()
