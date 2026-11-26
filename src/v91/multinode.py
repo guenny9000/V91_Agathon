@@ -80,6 +80,12 @@ class MultiNodeOrchestrator:
                             active for active in self._active_nodes
                             if active is not candidate
                         ]
+                # Preserve registration order so a later stop() retries in
+                # reverse startup order, including after multiple rollback failures.
+                self._active_nodes = [
+                    registered for registered in self.nodes
+                    if self._contains_identity(self._active_nodes, registered)
+                ]
                 raise NodeLifecycleError("start", failures) from start_error
             else:
                 self._active_nodes.append(node)
