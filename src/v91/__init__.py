@@ -3,7 +3,7 @@
 from .audit import HashChainAuditLogger
 from .audit_deep import AuditDeep
 from .ledger import LedgerError, append_ledger_record, verify_ledger
-from .multinode import MultiNodeOrchestrator
+from .multinode import MultiNodeOrchestrator, NodeLifecycleError
 from .pipeline import SemgrepIntegrator
 
 __all__ = [
@@ -11,6 +11,7 @@ __all__ = [
     "HashChainAuditLogger",
     "LedgerError",
     "MultiNodeOrchestrator",
+    "NodeLifecycleError",
     "SemgrepIntegrator",
     "append_ledger_record",
     "verify_ledger",
