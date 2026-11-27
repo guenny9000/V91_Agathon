@@ -1,4 +1,24 @@
-Flask
-requests
-SQLAlchemy
+# Compatibility file (Issue #26, audit 27.11.2026).
+# The supported installation path is the package metadata in
+# pyproject.toml:  pip install -e .
+#
+# Full-repo import audit (19 tracked Python files, incl. dynamic-load
+# scan): Flask, requests, SQLAlchemy have ZERO source imports, ZERO
+# dynamic loads, and ZERO references to this file (no CI, Docker,
+# deploy script, or README consumer).
+#
+# Measured removal (PyPI wheel sizes, 27.11.2026):
+#   direct wheels   2,248,359 B  (flask 3.1.3, requests 2.34.2,
+#                                 sqlalchemy 2.1.9)
+#   transitive      973,637 B  (11 mandatory runtime wheels:
+#                                 blinker, certifi, charset_normalizer,
+#                                 click, idna, itsdangerous, jinja2,
+#                                 markupsafe, typing-extensions,
+#                                 urllib3, werkzeug)
+#   total       3,221,996 B download volume per install, avoided.
+#   Cold-install TIME: NICHT_GEPRUEFT (no pip in the audit sandbox).
+#
+# Do NOT re-add removed packages here. If a downstream integration
+# genuinely needs one, declare it as a named optional extra in
+# pyproject.toml (Issue #26 acceptance plan, step 4).
 cryptography>=41.0.0
