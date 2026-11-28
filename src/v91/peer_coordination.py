@@ -30,7 +30,8 @@ from .ledger import LedgerError, canonical_bytes
 
 MESSAGE_SCHEMA = "v91.agathon.peer_message.v1"
 MESSAGE_TYPES = frozenset(
-    {"hello", "heartbeat", "status_report", "task_offer", "task_result"}
+    {"hello", "heartbeat", "status_report", "task_offer", "task_result",
+     "control_request"}
 )
 ALLOWED_SCOPES = frozenset(MESSAGE_TYPES)
 MAX_BODY_CHARS = 2048
