@@ -343,7 +343,8 @@ def test_module_contains_no_network_or_code_execution_primitives():
 
 def test_allowed_scopes_stay_minimal():
     assert ALLOWED_SCOPES == frozenset(
-        {"hello", "heartbeat", "status_report", "task_offer", "task_result"}
+        {"hello", "heartbeat", "status_report", "task_offer", "task_result",
+         "control_request"}
     )
     assert "root" not in ALLOWED_SCOPES and "*" not in ALLOWED_SCOPES
 
